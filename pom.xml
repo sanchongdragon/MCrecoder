@@ -74,7 +74,7 @@
                 <version>3.3.1</version>
                 <configuration>
                     <to>
-                        <image>asia.gcr.io/still-fact-377903/linebot-mcrecoder-jib:v0.1</image>
+                        <image>us-east1-docker.pkg.dev/linebotmcrecorder/linebot-mcrecoder-jib/linebot-mcrecoder-jib:v0.1</image>
                         <credHelper>gcr</credHelper>
                     </to>
                 </configuration>
