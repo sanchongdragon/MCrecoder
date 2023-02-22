@@ -1,10 +1,9 @@
 package com.mike.MCrecoder.services;
 
-import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.Sheet;
 import com.mike.MCrecoder.utils.GoogleAuthorizeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,11 +19,13 @@ public class GoogleSheetsServiceUtil {
 
     public static Sheets getSheets() throws GeneralSecurityException, IOException {
 
-        Credential credential = GoogleAuthorizeUtil.getCredential();
+        // get service account GoogleCredential
+        GoogleCredential googleCredential = GoogleAuthorizeUtil.getServiceCredential();
 
+        // Put the GoogleCredential to Use "Sheets" API
         return new Sheets.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
-                JacksonFactory.getDefaultInstance(), credential
+                JacksonFactory.getDefaultInstance(), googleCredential
         ).setApplicationName(APPLICATION_NAME).build();
 
     }

@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 @RestController
 @Slf4j
 @LineMessageHandler
@@ -20,7 +23,7 @@ public class LineBotReplyController {
     private ReplyService replyService;
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws GeneralSecurityException, IOException {
         log.info("handleTextMessageEvent event: " + event);
         return replyService.handleTextMessageEvent(event);
     }
