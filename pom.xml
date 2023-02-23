@@ -93,7 +93,7 @@
                 <version>3.3.1</version>
                 <configuration>
                     <to>
-                        <image>us-east1-docker.pkg.dev/linebotmcrecorder/linebot-mcrecoder-jib/linebot-mcrecoder-jib:v0.1</image>
+                        <image>asia-east1-docker.pkg.dev/linebotmcrecorder/linebotmcrecorder/linebot-mcrecoder-jib:v0.1</image>
                         <credHelper>gcr</credHelper>
                     </to>
                 </configuration>
