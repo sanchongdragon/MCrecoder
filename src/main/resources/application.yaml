@@ -1,4 +1,0 @@
-#line.bot:
-#  channel-token: @channelAccessToken@
-#  channel-secret: @channelSecret@
-#  handler.path: /callback

@@ -5,7 +5,6 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 
 public class GoogleAuthorizeUtil {
@@ -20,7 +19,7 @@ public class GoogleAuthorizeUtil {
     public static GoogleCredential getServiceCredential() throws IOException {
 
 //         add SpreadSheets Scope
-        List<String> scopes = Arrays.asList(SheetsScopes.SPREADSHEETS);
+        List<String> scopes = List.of(SheetsScopes.SPREADSHEETS);
 //         load your google service account credential
 //         this credential will generate by google
 //         more info : https://developers.google.com/identity/protocols/oauth2/service-account?hl=zh-tw

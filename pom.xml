@@ -86,6 +86,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<!--                    prevent console output wrong encoding while maven run-->
+                <configuration>
+                    <jvmArguments>-Dfile.encoding=UTF8</jvmArguments>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
