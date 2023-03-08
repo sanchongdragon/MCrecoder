@@ -36,10 +36,11 @@ public class ReplyService {
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException, URISyntaxException {
         log.info("handleTextMessageEvent event: " + event);
 //        googleSheetsService.queryPrevious();
-        log.info("Line UserId: {}", getUserName(event.getSource().getUserId()));
+//        log.info("Line UserId: {}", getUserName(event.getSource().getUserId()));
         LineUserInfoVo userInfoVo = lineApiAccessService.accessUserInfo(event.getSource().getUserId());
-        log.info(userInfoVo.toString());
-        googleSheetsService.getAllSheets();
+//        log.info(userInfoVo.toString());
+//        googleSheetsService.getAllSheets();
+        log.info(googleSheetsService.queryPrevious(userInfoVo.getDisplayName()));
         return new TextMessage(event.getMessage().getText() + " im auto reply bot");
     }
 
@@ -66,11 +67,6 @@ public class ReplyService {
 
     public void handleDefaultMessageEvent(Event event) {
         log.info("handleDefaultMessageEvent event: " + event);
-    }
-
-    private String getUserName(String userId){
-
-        return "";
     }
 
 }

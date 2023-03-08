@@ -1,9 +1,8 @@
 package com.mike.MCrecoder.services;
 
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
-import com.google.api.services.sheets.v4.model.Sheet;
-import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.*;
+import com.mike.MCrecoder.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,29 +20,46 @@ public class GoogleSheetsService {
     @Autowired
     private Sheets sheets;
 
-    public void getAllSheets() throws IOException {
-        Sheets.Spreadsheets.Get spreadSheet = sheets.spreadsheets().get(SPREADSHEET_ID);
-        log.info("SpreadSheetsId: {} / Size: {}", spreadSheet.getSpreadsheetId(), spreadSheet.size());
-        Sheets.Spreadsheets.SheetsOperations sheetsOperations = sheets.spreadsheets().sheets();
-        Spreadsheet allSheets = spreadSheet.execute();
-        List<Sheet> listOfSheet = allSheets.getSheets().stream().filter(
-                sheet -> {
-                    log.info("Sheet Title: {}", sheet.getProperties().getTitle());
-                    return true;
-                }
-        ).collect(Collectors.toList());
-        log.info("JASMINE Sheet Size: {}", listOfSheet.size());
+    public Sheet getSheetsByTitle(String userName) throws IOException, UserNotFoundException {
+        // filter sheet by userName
+        List<Sheet> allSheets = getAllSheets();
+        return allSheets.stream().filter(
+                sheet1 -> userName.equals(sheet1.getProperties().getTitle())
+        ).findFirst().orElseThrow(() -> new UserNotFoundException(userName));
     }
 
-    public void queryPrevious() throws IOException {
-        log.info("Access Google Sheets ApplicationName: {}", sheets.getApplicationName());
+    public List<Sheet> getAllSheets() throws IOException {
+        // get all sheets
+        Spreadsheet allSheets = sheets.spreadsheets().get(SPREADSHEET_ID).execute();
+        return allSheets.getSheets();
+    }
+
+    public String queryPrevious(String userName) throws IOException {
         List<String> rangeList = new ArrayList<>();
-        for(int i = 1; i <= 26 ; i++){
+        for (int i = 1; i <= 26; i++) {
             rangeList.add("A" + i);
         }
-//        System.err.println(sheets.spreadsheets().get(SPREADSHEET_ID).getRanges().toArray());
+
+        try {
+            Sheet sheet = getSheetsByTitle(userName);
+            log.info("title: {}, sheet: {}", userName, sheet);
+            List<GridData> data = sheet.getData();
+            log.info("GridData Size: {}", data.size());
+            log.info("GridData Info: {}", data);
+            data.forEach(gridData -> {
+                List<RowData> rowData = gridData.getRowData();
+                log.info("RowData Size: {}", rowData.size());
+                rowData.forEach(row -> {
+                    List<CellData> cellData = row.getValues();
+                    log.info("CellData: {}", cellData);
+                });
+            });
+        }catch (UserNotFoundException userNotFoundException){
+            return "Can Not Found UserName";
+        }
         BatchGetValuesResponse response = sheets.spreadsheets().values().batchGet(SPREADSHEET_ID).setRanges(rangeList).execute();
         System.err.println(response.values());
+        return "查不到前一次";
     }
 
 }
