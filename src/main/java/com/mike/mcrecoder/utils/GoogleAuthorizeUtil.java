@@ -1,4 +1,4 @@
-package com.mike.MCrecoder.utils;
+package com.mike.mcrecoder.utils;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.sheets.v4.SheetsScopes;

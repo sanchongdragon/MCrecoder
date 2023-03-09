@@ -1,4 +1,4 @@
-package com.mike.MCrecoder.model;
+package com.mike.mcrecoder.model;
 
 import lombok.Data;
 

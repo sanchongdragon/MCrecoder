@@ -1,4 +1,4 @@
-package com.mike.MCrecoder.configure;
+package com.mike.mcrecoder.configure;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

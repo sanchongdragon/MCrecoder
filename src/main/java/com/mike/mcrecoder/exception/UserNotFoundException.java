@@ -1,4 +1,4 @@
-package com.mike.MCrecoder.exception;
+package com.mike.mcrecoder.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.mike.MCrecoder;
+package com.mike.mcrecoder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

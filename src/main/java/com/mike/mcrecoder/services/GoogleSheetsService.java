@@ -1,8 +1,9 @@
-package com.mike.MCrecoder.services;
+package com.mike.mcrecoder.services;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.*;
-import com.mike.MCrecoder.exception.UserNotFoundException;
+import com.mike.mcrecoder.constant.ReturnCodeEnum;
+import com.mike.mcrecoder.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,11 @@ public class GoogleSheetsService {
     public List<Sheet> getAllSheets() throws IOException {
         // get all sheets
         Spreadsheet allSheets = sheets.spreadsheets().get(SPREADSHEET_ID).execute();
+//        sheets.spreadsheets().values().batchGet()
         return allSheets.getSheets();
     }
 
-    public String queryPrevious(String userName) throws IOException {
+    public ReturnCodeEnum queryPrevious(String userName) throws IOException {
         List<String> rangeList = new ArrayList<>();
         for (int i = 1; i <= 26; i++) {
             rangeList.add("A" + i);
@@ -42,24 +44,17 @@ public class GoogleSheetsService {
 
         try {
             Sheet sheet = getSheetsByTitle(userName);
-            log.info("title: {}, sheet: {}", userName, sheet);
-            List<GridData> data = sheet.getData();
-            log.info("GridData Size: {}", data.size());
-            log.info("GridData Info: {}", data);
-            data.forEach(gridData -> {
-                List<RowData> rowData = gridData.getRowData();
-                log.info("RowData Size: {}", rowData.size());
-                rowData.forEach(row -> {
-                    List<CellData> cellData = row.getValues();
-                    log.info("CellData: {}", cellData);
-                });
-            });
+            Integer columns = sheet.getProperties().getGridProperties().getColumnCount();
+
+            if(columns == null || columns < 2)
+                return ReturnCodeEnum.NOT_FOUND_RECORD;
+
         }catch (UserNotFoundException userNotFoundException){
-            return "Can Not Found UserName";
+            return ReturnCodeEnum.NOT_FOUND_USER;
         }
         BatchGetValuesResponse response = sheets.spreadsheets().values().batchGet(SPREADSHEET_ID).setRanges(rangeList).execute();
         System.err.println(response.values());
-        return "查不到前一次";
+        return ReturnCodeEnum.QUERY_PREVIOUS;
     }
 
 }

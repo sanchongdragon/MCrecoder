@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mike</groupId>
-    <artifactId>MCrecoder</artifactId>
+    <artifactId>mcrecoder</artifactId>
     <!--	<version>0.0.1-SNAPSHOT</version>-->
-    <name>MCrecoder</name>
+    <name>mcrecoder</name>
     <description>log for mc</description>
     <properties>
         <java.version>11</java.version>

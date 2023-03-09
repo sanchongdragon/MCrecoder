@@ -1,6 +1,6 @@
-package com.mike.MCrecoder.services;
+package com.mike.mcrecoder.services;
 
-import com.mike.MCrecoder.model.LineUserInfoVo;
+import com.mike.mcrecoder.model.LineUserInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

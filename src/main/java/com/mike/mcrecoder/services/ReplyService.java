@@ -1,10 +1,10 @@
-package com.mike.MCrecoder.services;
+package com.mike.mcrecoder.services;
 
 import com.linecorp.bot.model.event.*;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.postback.PostbackContent;
 import com.linecorp.bot.model.message.TextMessage;
-import com.mike.MCrecoder.model.LineUserInfoVo;
+import com.mike.mcrecoder.model.LineUserInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

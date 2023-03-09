@@ -1,4 +1,4 @@
-package com.mike.MCrecoder.configure;
+package com.mike.mcrecoder.configure;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
