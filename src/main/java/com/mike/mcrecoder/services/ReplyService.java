@@ -40,7 +40,8 @@ public class ReplyService {
         LineUserInfoVo userInfoVo = lineApiAccessService.accessUserInfo(event.getSource().getUserId());
 //        log.info(userInfoVo.toString());
 //        googleSheetsService.getAllSheets();
-        log.info(googleSheetsService.queryPrevious(userInfoVo.getDisplayName()));
+//        log.info(googleSheetsService.queryPrevious(userInfoVo.getDisplayName()));
+        googleSheetsService.queryPrevious(userInfoVo.getDisplayName());
         return new TextMessage(event.getMessage().getText() + " im auto reply bot");
     }
 

@@ -2,8 +2,11 @@ package com.mike.mcrecoder.services;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.*;
+import com.mike.mcrecoder.constant.A1ExpressionConst;
 import com.mike.mcrecoder.constant.ReturnCodeEnum;
 import com.mike.mcrecoder.exception.UserNotFoundException;
+import com.mike.mcrecoder.model.SpreadSheetDto;
+import com.mike.mcrecoder.utils.A1ExpressionCreatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,10 +40,6 @@ public class GoogleSheetsService {
     }
 
     public ReturnCodeEnum queryPrevious(String userName) throws IOException {
-        List<String> rangeList = new ArrayList<>();
-        for (int i = 1; i <= 26; i++) {
-            rangeList.add("A" + i);
-        }
 
         try {
             Sheet sheet = getSheetsByTitle(userName);
@@ -49,12 +48,23 @@ public class GoogleSheetsService {
             if(columns == null || columns < 2)
                 return ReturnCodeEnum.NOT_FOUND_RECORD;
 
+            List<String> rangeList = A1ExpressionCreatUtil.getColumnsRanges(columns);
+            BatchGetValuesResponse response = sheets.spreadsheets().values().batchGet(SPREADSHEET_ID).setRanges(rangeList).execute();
+            List<ValueRange> valueRangeList = response.getValueRanges();
+            log.info("valueRangeList size: {}", valueRangeList.size());
+
+            SpreadSheetDto spreadSheetDto = SpreadSheetDto.from(valueRangeList);
+            valueRangeList.forEach(valueRange -> {
+                log.info("Range: {} / Value: {}", valueRange.getRange(), valueRange.getValues().get(0).get(0));
+            });
+            log.info(spreadSheetDto.toString());
+//            System.err.println(response.values());
+
         }catch (UserNotFoundException userNotFoundException){
             return ReturnCodeEnum.NOT_FOUND_USER;
         }
-        BatchGetValuesResponse response = sheets.spreadsheets().values().batchGet(SPREADSHEET_ID).setRanges(rangeList).execute();
-        System.err.println(response.values());
         return ReturnCodeEnum.QUERY_PREVIOUS;
+
     }
 
 }
