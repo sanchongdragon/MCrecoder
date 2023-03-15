@@ -5,14 +5,15 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.mike.mcrecoder.utils.GoogleAuthorizeUtil;
-import lombok.extern.slf4j.Slf4j;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 @Service
-@Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GoogleSheetsServiceUtil {
 
     private static final String APPLICATION_NAME = "mcrecoder";

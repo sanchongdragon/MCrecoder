@@ -43,24 +43,41 @@ public class GoogleSheetsService {
 
         try {
             Sheet sheet = getSheetsByTitle(userName);
-            Integer columns = sheet.getProperties().getGridProperties().getColumnCount();
 
-            if(columns == null || columns < 2)
+            ValueRange sheetRange = sheets.spreadsheets().values().get(SPREADSHEET_ID, sheet.getProperties().getTitle()).execute();
+            int lastColumnNum = sheetRange.getValues().size();
+
+            String columnRange = A1ExpressionCreatUtil.getColumnRange(
+                    lastColumnNum, sheet.getProperties().getTitle(),
+                    A1ExpressionConst.COLUMN_YEAR, A1ExpressionConst.COLUMN_UPDATE_TIME
+            );
+
+            log.info("RealColumnSize: {}", lastColumnNum);
+
+            if (lastColumnNum < 2)
                 return ReturnCodeEnum.NOT_FOUND_RECORD;
 
-            List<String> rangeList = A1ExpressionCreatUtil.getColumnsRanges(columns);
-            BatchGetValuesResponse response = sheets.spreadsheets().values().batchGet(SPREADSHEET_ID).setRanges(rangeList).execute();
-            List<ValueRange> valueRangeList = response.getValueRanges();
-            log.info("valueRangeList size: {}", valueRangeList.size());
-
-            SpreadSheetDto spreadSheetDto = SpreadSheetDto.from(valueRangeList);
-            valueRangeList.forEach(valueRange -> {
-                log.info("Range: {} / Value: {}", valueRange.getRange(), valueRange.getValues().get(0).get(0));
-            });
-            log.info(spreadSheetDto.toString());
+//            List<String> rangeList = A1ExpressionCreatUtil.getColumnsRanges(columns);
+//            BatchGetValuesResponse response = sheets.spreadsheets().values().batchGet(SPREADSHEET_ID).setRanges(rangeList).execute();
+//            List<ValueRange> valueRangeList = response.getValueRanges();
+//            log.info("valueRangeList size: {}", valueRangeList.size());
+//
+//            SpreadSheetDto spreadSheetDto = SpreadSheetDto.from(valueRangeList);
+//            valueRangeList.forEach(valueRange -> {
+//                log.info("Range: {} / Value: {}", valueRange.getRange(), valueRange.getValues().get(0).get(0));
+//            });
+//            log.info(spreadSheetDto.toString());
 //            System.err.println(response.values());
 
-        }catch (UserNotFoundException userNotFoundException){
+
+            ValueRange valueRange = sheets.spreadsheets().values().get(SPREADSHEET_ID, columnRange).execute();
+            log.info("Range Is: {}", valueRange.getRange());
+            valueRange.getValues().forEach(eachColumnValue ->
+                    eachColumnValue.forEach(eachRowValue ->
+                            log.info("eachRowValue: {}", eachRowValue)
+                    ));
+
+        } catch (UserNotFoundException userNotFoundException) {
             return ReturnCodeEnum.NOT_FOUND_USER;
         }
         return ReturnCodeEnum.QUERY_PREVIOUS;
